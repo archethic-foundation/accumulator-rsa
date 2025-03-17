@@ -1,6 +1,5 @@
 use crate::{
-    b2fa, hash::hash_to_prime, key::AccumulatorSecretKey, FACTOR_SIZE, MEMBER_SIZE,
-    MEMBER_SIZE_BITS, MIN_BYTES,
+    b2fa, hash::hash_to_prime, key::AccumulatorSecretKey, FACTOR_SIZE, MEMBER_SIZE_BITS, MIN_BYTES
 };
 use common::{
     bigint::BigInteger,
@@ -237,18 +236,11 @@ impl Accumulator {
 
     /// Convert accumulator to bytes
     pub fn to_bytes(&self) -> Vec<u8> {
-        let mut out = Vec::with_capacity(MIN_BYTES + MEMBER_SIZE * self.members.len());
+        let mut out = Vec::with_capacity(MIN_BYTES);
 
         out.append(b2fa(&self.generator, FACTOR_SIZE * 2).as_mut());
         out.append(b2fa(&self.value, FACTOR_SIZE * 2).as_mut());
         out.append(b2fa(&self.modulus, FACTOR_SIZE * 2).as_mut());
-
-        let m_len = self.members.len() as u32;
-        out.extend_from_slice(m_len.to_be_bytes().as_ref());
-
-        for b in &self.members {
-            out.append(b2fa(b, MEMBER_SIZE).as_mut());
-        }
 
         out
     }
@@ -286,7 +278,7 @@ impl TryFrom<&[u8]> for Accumulator {
     type Error = AccumulatorError;
 
     fn try_from(data: &[u8]) -> Result<Self, Self::Error> {
-        if data.len() < MIN_BYTES {
+        if data.len() != MIN_BYTES {
             return Err(AccumulatorError::from_msg(
                 AccumulatorErrorKind::InvalidType,
                 format!("Expected size {}, found {}", MIN_BYTES, data.len()),
@@ -308,23 +300,9 @@ impl TryFrom<&[u8]> for Accumulator {
 
         let modulus = BigInteger::try_from(&data[offset..end])?;
 
-        offset = end;
-        end = offset + 4;
-
-        let member_count = u32::from_be_bytes(*array_ref![data, offset, 4]) as usize;
-        let mut members = BTreeSet::new();
-
-        offset = end;
-        end = offset + MEMBER_SIZE;
-        for _ in 0..member_count {
-            let m = BigInteger::try_from(&data[offset..end])?;
-            members.insert(m);
-            offset = end;
-            end = offset + MEMBER_SIZE;
-        }
         Ok(Self {
             generator,
-            members,
+	    members: BTreeSet::new(),
             modulus,
             value,
         })
