@@ -65,7 +65,7 @@ pub(crate) fn b2fa(b: &BigInteger, expected_size: usize) -> Vec<u8> {
     let bt = b.to_bytes();
     assert!(
         expected_size >= bt.len(),
-        format!("expected = {}, found = {}", expected_size, bt.len())
+        "expected = {}, found = {}", expected_size, bt.len()
     );
     t[(expected_size - bt.len())..].clone_from_slice(bt.as_slice());
     t

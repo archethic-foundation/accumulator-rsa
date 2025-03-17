@@ -68,7 +68,7 @@ impl MembershipWitness {
             };
         }
         let totient = secret_key.totient();
-        let f = common::Field::new(&totient);
+        let f = Field::new(&totient);
         let exp = accumulator
             .members
             .par_iter()
