@@ -265,7 +265,6 @@ impl Clone for Accumulator {
         }
     }
 }
-
 impl TryFrom<Vec<u8>> for Accumulator {
     type Error = AccumulatorError;
 

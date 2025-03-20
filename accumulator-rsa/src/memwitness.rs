@@ -26,12 +26,12 @@ impl MembershipWitness {
 
     /// Return a new membership witness with a value that is already prime
     pub fn new_prime(accumulator: &Accumulator, x: &BigInteger) -> Result<Self, AccumulatorError> {
-        if !accumulator.members.contains(&x) {
-            return Err(AccumulatorError::from_msg(
-                AccumulatorErrorKind::InvalidMemberSupplied,
-                "value is not in the accumulator",
-            ));
-        }
+        // if !accumulator.members.contains(&x) {
+        //     return Err(AccumulatorError::from_msg(
+        //         AccumulatorErrorKind::InvalidMemberSupplied,
+        //         "value is not in the accumulator",
+        //     ));
+        // }
         let exp = accumulator
             .members
             .par_iter()
