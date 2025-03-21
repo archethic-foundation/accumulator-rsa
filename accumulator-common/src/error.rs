@@ -80,13 +80,6 @@ impl From<AccumulatorErrorKind> for AccumulatorError {
     }
 }
 
-#[cfg(feature = "openssl")]
-impl From<openssl::error::ErrorStack> for AccumulatorError {
-    fn from(err: openssl::error::ErrorStack) -> Self {
-        AccumulatorError::from_msg(AccumulatorErrorKind::InvalidType, err.errors().iter().map(|e| e.reason().unwrap_or("")).collect::<Vec<&str>>().join(","))
-    }
-}
-
 #[cfg(feature = "rust-gmp")]
 impl From<gmp::mpz::ParseMpzError> for AccumulatorError {
     fn from(err: gmp::mpz::ParseMpzError) -> Self {

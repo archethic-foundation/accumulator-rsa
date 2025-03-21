@@ -1,6 +1,3 @@
-/// Use Big Integer implementation backed by OpenSSL BigNum
-#[cfg(feature = "openssl")]
-pub mod ossl;
 /// Use Big Integer implementation backed by GMP Mpz
 #[cfg(feature = "rust-gmp")]
 pub mod mpz;
@@ -19,8 +16,6 @@ pub struct GcdResult {
     pub b: BigInteger
 }
 
-#[cfg(feature = "openssl")]
-pub use ossl::OsslBigInt as BigInteger;
 #[cfg(feature = "rust-gmp")]
 pub use mpz::MpzBigInt as BigInteger;
 #[cfg(feature = "bi-rust")]

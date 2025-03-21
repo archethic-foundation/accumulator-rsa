@@ -17,13 +17,10 @@ pub mod bigint;
 /// Accumulator errors that can be thrown
 pub mod error;
 
-#[cfg(not(any(feature = "openssl", feature = "rust-gmp", feature = "num-bigint")))]
-compile_error!("A big number library must be chosen: either bigint-rust, openssl, or rust-gmp");
-#[cfg(any(all(feature = "openssl", feature = "rust-gmp", feature = "bigint-rust"),
-all(feature = "openssl", feature = "rust-gmp"),
-all(feature = "openssl", feature = "bigint-rust"),
-all(feature = "bigint-rust", feature = "rust-gmp")))]
-compile_error!("Only one big number library must be chosen: either bigint-rust, openssl, or rust-gmp");
+#[cfg(not(any(feature = "bi-rust", feature = "bi-gmp")))]
+compile_error!("A big number library must be chosen: either bi-rust or bi-gmp");
+#[cfg(all(feature = "bi-rust", feature = "bi-gmp"))]
+compile_error!("Only one big number library must be chosen: either bi-rust or bi-gmp");
 
 use bigint::BigInteger;
 
